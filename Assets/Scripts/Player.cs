@@ -1,24 +1,21 @@
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class Player : MonoBehaviour
 {
-    
-    void Update()
-    { 
-    Vector3 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        mousePosition.z = 0; // Ensure the object stays in the same plane as the camera.
-
-        transform.position = mousePosition;
-    }
-    private void OnCollisionEnter2D (Collision2D other)
+    public float speed = 100f;
+    Rigidbody2D rb;
+    void Start()
     {
-        if (other.gameObject.name == "Wall")
+        rb = GetComponent<Rigidbody2D>();
+    }
+
+    void Update()
+    {
         {
-            //transform.position = spawnPoint;
-            var currentScene = SceneManager.GetActiveScene().name;
-            SceneManager.LoadScene(currentScene);
-            print(currentScene);
+            var mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            mousePos.z = 0;
+            var position = Vector3.MoveTowards(transform.position, mousePos, speed * Time.deltaTime);
+            rb.MovePosition(position);
         }
     }
 }
